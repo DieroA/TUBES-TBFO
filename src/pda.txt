@@ -1,0 +1,14 @@
+Q P F
+<, >, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+Z Y
+Q
+Z
+F
+F
+Q a Z Q YZ
+Q a Y Q YY
+Q e Z P Z
+Q e Y P Y 
+P a Z P e 
+P a Y P e
+P e Z F e
