@@ -19,10 +19,11 @@ class PDA:
         self.current_state = current_state
     
     def baca_pda(self, file):
+        # Membaca file pda.txt 
         try:
             lines = []
             for line in open(file, "r"):
-                lines.append(line.strip())          # Baca file pda.txt, simpen di lines
+                lines.append(line.strip())
         except Exception:
             print(f"Gagal membuka file {file}.")
             return
@@ -54,6 +55,7 @@ class PDA:
             self.production_rules[state].append((input_symbol, stack_pop, next_state, stack_push))
 
     def pda_input(self, input):
+        # Membaca input pda, mengubah state dan stack pda sesuai dengan production rules yang ada
         isValid = False
         for rule in self.production_rules[self.current_state]:
             if input in rule:
@@ -71,11 +73,12 @@ class PDA:
             self.current_stack.pop()
         self.current_state = rule[2]
         if rule[3] != 'e':
-            symbols = [char for char in rule[3]]
+            symbols = [rule[3].split(',')]
             self.current_stack.extend(reversed(symbols))
 
     def stop(self):
-        if self.accept_with == 'E' and len(self.current_stack) == 0:                          # Empty Stack
+        # Mengembalikan True jika PDA mencapai final state / empty stack
+        if self.accept_with == 'E' and len(self.current_stack) == 0:                               # Empty Stack
             return True
         elif self.accept_with == 'F' and self.current_state in self.accepting_states:              # Final State
             return True

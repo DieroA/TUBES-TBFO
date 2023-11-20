@@ -10,7 +10,4 @@ pda_var = pda.PDA(total_states = [], input_symbols = [],
 
 pda_var.baca_pda('src/pda.txt')
 
-pda_var.pda_input('a')
-pda_var.pda_input('e')
-print(pda_var.current_state)
-print(pda_var.current_stack)
+print(pda_var.input_symbols)
