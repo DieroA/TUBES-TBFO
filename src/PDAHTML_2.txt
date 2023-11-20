@@ -1,0 +1,88 @@
+States
+Q H B F
+
+Simbol
+html /html head /head body /body title /title link script /script h1 /h1 h2 /h2 h3 /h3 h4 /h4 h5 /h5 h6 /h6 p /p br em /em b /b abbr /abbr strong /strong small /small hr div /div a /a img button /button form /form input table /table tr /tr td /td th /th e
+
+Stack
+Z HTML HEAD BODY TITLE SCRIPT H1 H2 H3 H4 H5 H6 P EM B ABBR STRONG SMALL DIV A BUTTON FORM TABLE TR TD TH E
+Q # starting state
+Z # starting stack
+F # accepting states
+F # E - accepts with empty stack or F - accepts with accepting state
+
+List of Production
+Q html Z H HTML,Z
+H head HTML H HEAD,HTML
+H title HEAD H TITLE,HEAD
+H /title TITLE H e
+H link HEAD H HEAD
+H script HEAD H SCRIPT,HEAD 
+H /script HEAD H e
+H /head HEAD B e
+B body HTML B BODY,HTML
+B title BODY B TITLE,BODY
+B /title TITLE B e
+B link BODY B BODY
+B script BODY B SCRIPT,BODY 
+B /script BODY B e
+B h1 BODY B H1,BODY
+B h2 BODY B H2,BODY
+B h3 BODY B H3,BODY
+B h4 BODY B H4,BODY
+B h5 BODY B H5,BODY
+B h6 BODY B H6,BODY
+B div BODY B DIV,BODY
+B /div BODY B e
+B div DIV B DIV,DIV
+B /div DIV B e 
+B h1 DIV B H1,DIV
+B h2 DIV B H2,DIV
+B h3 DIV B H3,DIV
+B h4 DIV B H4,DIV
+B h5 DIV B H5,DIV
+B h6 DIV B H6,DIV
+B img BODY B BODY
+B img DIV B DIV
+B button BODY B BUTTON,BODY
+B button DIV B BUTTON,DIV
+B /button BUTTON B e
+B form BODY B FORM,BODY
+B form DIV B  FORM,DIV
+B /form FORM B e
+B input BODY B BODY
+B input DIV B DIV
+B p BODY B P,BODY
+B p DIV B P,DIV
+B /p P B e
+B br BODY B BODY
+B br DIV B DIV 
+B em BODY B EM,BODY
+B em DIV B EM,DIV
+B /em EM B e
+B b BODY B B,BODY
+B b DIV B B,DIV
+B /b B B e
+B abbr BODY B ABBR,BODY
+B abbr DIV B ABBR,DIV
+B /abbr ABBR B e
+B strong BODY B STRONG,BODY
+B strong DIV B STRONG,DIV
+B /strong STRONG B e
+B small BODY B SMALL,BODY
+B small DIV B SMALL,DIV
+B /small SMALL B e
+B hr BODY B BODY
+B hr DIV B DIV
+B table BODY B TABLE,BODY
+B table DIV B TABLE,DIV
+B /table TABLE B e 
+B tr TABLE B TR,TABLE
+B /tr TR B e
+B th TABLE B TH,TR
+B /th TH B e
+B td TABLE B TD,TR
+B /td TD B e
+B /body BODY F e
+F /html HTML F e
+F e Z F E
