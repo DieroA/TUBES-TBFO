@@ -4,7 +4,7 @@ Z HTML HEAD BODY TITLE SCRIPT H1 H2 H3 H4 H5 H6 P EM B ABBR STRONG SMALL DIV A B
 Q
 Z
 F
-F
+E
 Q html Z H HTML,Z
 H head HTML H HEAD,HTML
 H title HEAD H TITLE,HEAD
@@ -50,23 +50,72 @@ B p DIV B P,DIV
 B /p P B e
 B br BODY B BODY
 B br DIV B DIV 
+B br P B P
+B br H1 B H1
+B br H2 B H2
+B br H3 B H3
+B br H4 B H4
+B br H5 B H5
+B br H6 B H6
 B em BODY B EM,BODY
 B em DIV B EM,DIV
+B em P B EM,P
+B em H1 B EM,H1
+B em H2 B EM,H2
+B em H3 B EM,H3
+B em H4 B EM,H4
+B em H5 B EM,H5
+B em H6 B EM,H6
 B /em EM B e
 B b BODY B B,BODY
 B b DIV B B,DIV
+B b P B B,P
+B b H1 B B,H1
+B b H2 B B,H2
+B b H3 B B,H3
+B b H4 B B,H4
+B b H5 B B,H5
+B b H6 B B,H6
 B /b B B e
 B abbr BODY B ABBR,BODY
 B abbr DIV B ABBR,DIV
+B abbr P B ABBR,P
+B abbr H1 B ABBR,H1
+B abbr H2 B ABBR,H2
+B abbr H3 B ABBR,H3
+B abbr H4 B ABBR,H4
+B abbr H5 B ABBR,H5
+B abbr H6 B ABBR,H6
 B /abbr ABBR B e
 B strong BODY B STRONG,BODY
 B strong DIV B STRONG,DIV
+B strong P B STRONG,P
+B strong H1 B STRONG,H1
+B strong H2 B STRONG,H2
+B strong H3 B STRONG,H3
+B strong H4 B STRONG,H4
+B strong H5 B STRONG,H5
+B strong H6 B STRONG,H6
 B /strong STRONG B e
 B small BODY B SMALL,BODY
 B small DIV B SMALL,DIV
+B small P B SMALL,P
+B small H1 B SMALL,H1
+B small H2 B SMALL,H2
+B small H3 B SMALL,H3
+B small H4 B SMALL,H4
+B small H5 B SMALL,H5
+B small H6 B SMALL,H6
 B /small SMALL B e
 B hr BODY B BODY
 B hr DIV B DIV
+B hr P B P
+B hr H1 B H1
+B hr H2 B H2
+B hr H3 B H3
+B hr H4 B H4
+B hr H5 B H5
+B hr H6 B H6
 B table BODY B TABLE,BODY
 B table DIV B TABLE,DIV
 B /table TABLE B e 
@@ -78,4 +127,4 @@ B td TABLE B TD,TR
 B /td TD B e
 B /body BODY F e
 F /html HTML F e
-F e Z F E
+F e Z F e
