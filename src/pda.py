@@ -6,7 +6,7 @@ class PDA:
                  starting_state, starting_stack, 
                  accepting_states, accept_with,
                  production_rules, current_stack,
-                 current_state):
+                 current_states):
         self.total_states = total_states            # ga kepake
         self.input_symbols = input_symbols          # ga kepake
         self.stack_symbols = stack_symbols          # ga kepake
@@ -16,7 +16,7 @@ class PDA:
         self.accept_with = accept_with              # E - empty stack, F - final state
         self.production_rules = production_rules
         self.current_stack = current_stack          # Stack top -> last element     
-        self.current_state = current_state
+        self.current_states = current_states
     
     def baca_pda(self, file):
         # Membaca file pda.txt 
@@ -35,7 +35,7 @@ class PDA:
         for symbol in lines[2].split():
             self.stack_symbols.append(symbol)
         self.starting_state = lines[3]
-        self.current_state = self.starting_state
+        self.current_states = self.starting_state
         self.starting_stack = lines[4]
         self.current_stack.append(self.starting_stack)
         for state in lines[5].split():
@@ -47,41 +47,83 @@ class PDA:
             state = char[0]
             input_symbol = char[1]
             stack_pop = char[2]
+            
             next_state = char[3]
             stack_push = char[4]
 
-            if state not in self.production_rules.keys():
-                self.production_rules[state] = []
-            self.production_rules[state].append((input_symbol, stack_pop, next_state, stack_push))
+            key = (state, input_symbol, stack_pop)
+            value = (next_state, stack_push)
 
-    def pda_input(self, input):
-        # Membaca input pda, mengubah state dan stack pda sesuai dengan production rules yang ada
-        isValid = False
-        for rule in self.production_rules[self.current_state]:
-            if input in rule:
-                if rule[1] == self.current_stack[-1]:
-                    isValid = True
-                else:
-                    isValid = False
-                break
+            self.production_rules[key] = value 
+
+    def process_input(self, input_list):
+        if (len(input_list) < 1):
+            return
         
-        if not isValid:        # Input tidak valid (gagal).
-            return             # nunggu pda.txt
-        
-        # rule = (input, pop from stack, next state, push to stack)
-        if rule[1] != 'e':
-            self.current_stack.pop()
-        self.current_state = rule[2]
-        if rule[3] != 'e':
-            symbols = [rule[3].split(',')]
-            self.current_stack.extend(reversed(symbols))
+        input = input_list[0]
+        input_list = input_list[1:]
 
-    def stop(self):
-        # Mengembalikan True jika PDA mencapai final state / empty stack
-        if self.accept_with == 'E' and len(self.current_stack) == 0:                               # Empty Stack
-            return True
-        elif self.accept_with == 'F' and self.current_state in self.accepting_states:              # Final State
-            return True
-        return False
+        next_states = []
+        new_stack = self.current_stack[:-1]
+        for current_state in self.current_states:
+            key = (current_state, input, self.current_stack[-1])             # belum bisa kalo pop epsilon
 
+            if key in self.production_rules:
+                next_state = self.production_rules[key][0]
+                stacks = self.production_rules[key][1].split(',')
+                stacks.reverse()
+
+                # Push to stack
+                for stack in stacks:
+                    if stack != 'e':
+                        new_stack.append(stack)
+                
+                # Lanjutkan dengan rekursi
+                next_states.append(next_state)
+                self.current_states = next_states
+                self.current_stack = new_stack
+                self.process_input_epsilon()                                
+                self.process_input(input_list)
     
+    def process_input_epsilon(self):
+        next_states = []
+        new_stack = self.current_stack[:-1]
+        for current_state in self.current_states:
+            key = (current_state, 'e', self.current_stack[-1])
+            if key in self.production_rules:
+                next_state = self.production_rules[key][0]
+                stacks = self.production_rules[key][1].split(',')
+                stacks.reverse()
+
+                # Push to stack
+                for stack in stacks:
+                    if stack != 'e':
+                        new_stack.append(stack)
+                
+                # Lanjutkan dengan rekursi
+                next_states.append(next_state)
+                self.current_states = next_states
+                self.current_stack = new_stack
+                self.process_input_epsilon()
+        else:
+            return
+
+
+    def accept(self, input_list):
+        self.process_input(input_list)
+
+        Valid = False
+        if self.accept_with == 'E' and len(self.current_stack) == 1 and self.current_stack[0] == 'E': # E adalah empty stack
+            Valid = True
+        elif self.accept_with == 'F':
+            for current_state in self.current_states:
+                if current_state in self.accepting_states:
+                    Valid = True
+                    break
+
+        if Valid:
+            print("Valid")
+        else:
+            print("Syntax Error")
+
+# TO DO: PROSES INPUT EPSILON, PROSES POP EPSILON
