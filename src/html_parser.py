@@ -95,7 +95,7 @@ def ValidateValues(attrStringValues,ValidValues):
         if(not (attr in ValidValues)):
             return False
     return True
-def parse_html():
+def parse_html(HTMLFilename):
     #dapetin semua tag yang sintaksnya kurung segitiganya sudah benar, belum dicek kevalidannya
     #1. filter tag yang kurungnya sudah valid
     #kalo kurungnya gak lengkap gak masuk list tags
@@ -111,8 +111,7 @@ def parse_html():
     inputAttributes = ['type']
     inputTypes = ['text','password','email','number','checkbox']
 
-    HTMLFilename = input()
-    HTMLFile = "src/"+HTMLFilename
+    HTMLFile = "../src/" + HTMLFilename
     with open(HTMLFile,'r') as file:
         HTMLStr = file.read()
     #print(HTMLStr)
@@ -284,6 +283,3 @@ html_doc = """
     </body>
 </html>
 """
-
-
-print(parse_html())

@@ -22,10 +22,12 @@ class PDA:
         # Membaca file pda.txt 
         try:
             lines = []
-            for line in open(file, "r"):
+            filename = "../src/" + file
+            for line in open(filename, "r"):
                 lines.append(line.strip())
-        except:
+        except Exception as e:
             print(f"Gagal membuka file {file}.")
+            print(e)
             return
 
         for state in lines[0].split():                  # States
@@ -63,7 +65,7 @@ class PDA:
             return
         
         # Rekurens
-        # note: input symbol dan pop stack 'e' belum bisa
+        # note: input symbol dan pop stack 'e' belum (agak) bisa
         input = input_list[0]
         input_list = input_list[1:]
 

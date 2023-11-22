@@ -1,4 +1,11 @@
 import pda
+import html_parser
+import sys
+
+# Input nama file dari terminal dengan format:
+# python main.py pda.txt "file.html"
+file_pda = sys.argv[1]
+file_html = sys.argv[2]
 
 # Initialize PDA
 pda_var = pda.PDA(total_states = [], input_symbols = [], 
@@ -6,11 +13,13 @@ pda_var = pda.PDA(total_states = [], input_symbols = [],
           starting_stack = "", accepting_states = [],
           accept_with = "", production_rules = {},
           current_stack = [], current_states = [])
-pda_var.baca_pda('src/pda.txt')
+pda_var.baca_pda(file_pda)
 
-# Baca input dari file .html
-# input_pda = ["html","body","h1","/h1","p","/p","/body","head","title","/title","/head","/html"]
-# input_pda = ["hmif","head","title","/title","/head","body","h1","/h1","p","/p","/body","/hmif"]
-#input_pda = ["html","body","h1","/h1","p","/p","/body","/html"]
-input_pda = ["html","head","/head","body","/body","/html"]
-pda_var.accept(input_pda)
+# Parse html
+hasil_parse = html_parser.parse_html(file_html)
+
+if hasil_parse[1]:
+    token = hasil_parse[0]
+    pda_var.accept(token)
+else:
+    print("Syntax Error")
