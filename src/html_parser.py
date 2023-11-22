@@ -52,7 +52,8 @@ def parse_html():
                 tagCheck.append(True)
     print("#CEK 1: cek apakah syntax kurung benar")
     print(tagCheck)
-
+    if False in tagCheck: #gagal cek kurung di tag,syntax error
+        return [],False
     
     #CEK 2: cek apakah ada spasi TEPAT SETELAH KURUNG BUKA
     prevChar = ""
@@ -69,8 +70,8 @@ def parse_html():
         tagCheck.append(flag)
     print("CEK 2: cek apakah ada spasi TEPAT SETELAH KURUNG BUKA")
     print(tagCheck)    
-    #if False in tagCheck: #gagal cek kurung di tag,syntax error
-    #    return [],False
+    if False in tagCheck: #gagal cek kurung di tag,syntax error
+        return [],False
 
     #FIX 1. hilangin semua whitespace sebelum kurung tutup dan setelah karakter terakhir
     fixedTags = []
@@ -86,6 +87,31 @@ def parse_html():
                 listchar[i] = ""
         fixedTags.append(tagFix.join(listchar))
     print(fixedTags)
+
+    #CEK 3: cek apakah tag yang diperiksa ada di list tag yang valid
+    #1. hapus semua kurung di semua tag
+    noBracketTags = []
+    for tag in fixedTags:
+        tag = tag.replace("<","")
+        tag = tag.replace(">","")
+        noBracketTags.append(tag)
+    #2. cek kevalidan tag yang sudah dibuka
+    isTagValid = []
+    for tag in noBracketTags:
+        tagChecker = ""
+        for char in tag:
+            if(char == "/"):
+                continue
+            if(char == ' ' or char == '=' or char == '"'):
+                break
+            tagChecker = tagChecker+char
+        boolTag = tagChecker in validTagKeywords
+        isTagValid.append(boolTag)
+    #cek 3: cek apakah tag yang diperiksa ada di list tag yang valid
+    print("bool tag")
+    print(isTagValid)
+    if False in isTagValid: #gagal cek tag yang valid,syntax error
+        return [],False
     
 
                 
