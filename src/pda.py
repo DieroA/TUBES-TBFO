@@ -24,30 +24,30 @@ class PDA:
             lines = []
             for line in open(file, "r"):
                 lines.append(line.strip())
-        except Exception:
+        except:
             print(f"Gagal membuka file {file}.")
             return
 
-        for state in lines[0].split():
+        for state in lines[0].split():                  # States
             self.total_states.append(state)
-        for symbol in lines[1].split():
+        for symbol in lines[1].split():                 # Input symbols
             self.input_symbols.append(symbol)
-        for symbol in lines[2].split():
+        for symbol in lines[2].split():                 # Stack symbols
             self.stack_symbols.append(symbol)
-        self.starting_state = lines[3]
-        self.current_states = self.starting_state
-        self.starting_stack = lines[4]
-        self.current_stack.append(self.starting_stack)
-        for state in lines[5].split():
+        self.starting_state = lines[3]                  # Starting state
+        self.current_states = self.starting_state       # Current state
+        self.starting_stack = lines[4]                  # Starting stack symbol
+        self.current_stack.append(self.starting_stack)  # Current stack symbol
+        for state in lines[5].split():                  # Final state(s)
             self.accepting_states.append(state)
-        self.accept_with = lines[6]                      
-        for i in range(7, len(lines)):             
+        self.accept_with = lines[6]                     # Accept with final state / empty stack
+        for i in range(7, len(lines)):                  # Production rules
             char = lines[i].split()
             
+            # δ(state, input_symbol, stack_pop) = (next_state, stack_push)
             state = char[0]
             input_symbol = char[1]
             stack_pop = char[2]
-            
             next_state = char[3]
             stack_push = char[4]
 
@@ -57,17 +57,40 @@ class PDA:
             self.production_rules[key] = value 
 
     def process_input(self, input_list):
-        if (len(input_list) < 1):
+        # Basis
+        # Berhenti ketika input sudah diproses semua.
+        if (len(input_list) < 1):                      
             return
         
+        # Rekurens
+        # note: input symbol dan pop stack 'e' belum bisa
         input = input_list[0]
         input_list = input_list[1:]
 
         next_states = []
-        new_stack = self.current_stack[:-1]
+        new_stack = self.current_stack[:-1]         # Pop stack
         for current_state in self.current_states:
-            key = (current_state, input, self.current_stack[-1])             # belum bisa kalo pop epsilon
+            key = (current_state, input, self.current_stack[-1])
+            key_epsilon = (current_state, input, 'e');            
+            if key_epsilon in self.production_rules:
+                new_stack = self.current_stack      # Ga jadi pop
+                next_state = self.production_rules[key][0]
+                stacks = self.production_rules[key][1].split(',')
+                stacks.reverse()
 
+                # Push to stack
+                for stack in stacks:
+                    if stack != 'e':
+                        new_stack.append(stack)
+                
+                # Lanjutkan dengan rekursi
+                next_states.append(next_state)
+                self.current_states = next_states
+                self.current_stack = new_stack
+
+                self.process_input_epsilon()                                
+                self.process_input(input_list)   
+                     
             if key in self.production_rules:
                 next_state = self.production_rules[key][0]
                 stacks = self.production_rules[key][1].split(',')
@@ -82,6 +105,7 @@ class PDA:
                 next_states.append(next_state)
                 self.current_states = next_states
                 self.current_stack = new_stack
+
                 self.process_input_epsilon()                                
                 self.process_input(input_list)
     
@@ -108,7 +132,6 @@ class PDA:
         else:
             return
 
-
     def accept(self, input_list):
         self.process_input(input_list)
 
@@ -122,8 +145,6 @@ class PDA:
                     break
 
         if Valid:
-            print("Valid")
+            print("Accepted")
         else:
             print("Syntax Error")
-
-# TO DO: PROSES INPUT EPSILON, PROSES POP EPSILON
