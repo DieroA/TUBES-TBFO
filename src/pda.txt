@@ -25,6 +25,12 @@ B h3 BODY B H3,BODY
 B h4 BODY B H4,BODY
 B h5 BODY B H5,BODY
 B h6 BODY B H6,BODY
+B /h1 H1 B e
+B /h2 H2 B e
+B /h3 H3 B e
+B /h4 H4 B e
+B /h5 H5 B e
+B /h6 H6 B e
 B div BODY B DIV,BODY
 B /div BODY B e
 B div DIV B DIV,DIV
@@ -127,4 +133,4 @@ B td TABLE B TD,TR
 B /td TD B e
 B /body BODY F e
 F /html HTML F e
-F e Z F e
+F e Z F E
