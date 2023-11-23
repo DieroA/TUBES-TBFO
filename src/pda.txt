@@ -11,14 +11,14 @@ H title HEAD H TITLE,HEAD
 H /title TITLE H e
 H link HEAD H HEAD
 H script HEAD H SCRIPT,HEAD 
-H /script HEAD H e
+H /script SCRIPT H e
 H /head HEAD B e
 B body HTML B BODY,HTML
 B title BODY B TITLE,BODY
 B /title TITLE B e
 B link BODY B BODY
 B script BODY B SCRIPT,BODY 
-B /script BODY B e
+B /script SCRIPT B e
 B h1 BODY B H1,BODY
 B h2 BODY B H2,BODY
 B h3 BODY B H3,BODY
@@ -35,6 +35,8 @@ B div BODY B DIV,BODY
 B /div BODY B e
 B div DIV B DIV,DIV
 B /div DIV B e 
+B a BODY B A,BODY
+B a A B e
 B h1 DIV B H1,DIV
 B h2 DIV B H2,DIV
 B h3 DIV B H3,DIV
