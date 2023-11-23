@@ -18,6 +18,7 @@ pda_var.baca_pda(file_pda)
 # Parse html
 hasil_parse = html_parser.parse_html(file_html)
 
+# Proses menggunakan PDA
 if hasil_parse[1]:
     token = hasil_parse[0]
     pda_var.accept(token)

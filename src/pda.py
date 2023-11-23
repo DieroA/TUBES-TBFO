@@ -70,46 +70,42 @@ class PDA:
         input_list = input_list[1:]
 
         next_states = []
-        new_stack = self.current_stack[:-1]         # Pop stack
+        # new_stack = self.current_stack[:-1]         # Pop stack
+        new_stack = []
         for current_state in self.current_states:
             key = (current_state, input, self.current_stack[-1])
-            key_epsilon = (current_state, input, 'e');            
-            if key_epsilon in self.production_rules:
-                new_stack = self.current_stack      # Ga jadi pop
-                next_state = self.production_rules[key][0]
-                stacks = self.production_rules[key][1].split(',')
-                stacks.reverse()
+            key_epsilon = (current_state, input, 'e');   
 
-                # Push to stack
-                for stack in stacks:
-                    if stack != 'e':
-                        new_stack.append(stack)
+            for i in range(2):
+                if i == 0:                                          # (_, _, EPSILON) = (_, _)
+                    if key_epsilon in self.production_rules:
+                        new_stack = self.current_stack
+                    else:
+                        continue
                 
-                # Lanjutkan dengan rekursi
-                next_states.append(next_state)
-                self.current_states = next_states
-                self.current_stack = new_stack
-
-                self.process_input_epsilon()                                
-                self.process_input(input_list)   
-                     
-            if key in self.production_rules:
-                next_state = self.production_rules[key][0]
-                stacks = self.production_rules[key][1].split(',')
-                stacks.reverse()
-
-                # Push to stack
-                for stack in stacks:
-                    if stack != 'e':
-                        new_stack.append(stack)
+                elif i == 1:                                        # (_, _, ~EPSILON) = (_, _)
+                    if key in self.production_rules:
+                        new_stack = self.current_stack[:-1]
+                    else:
+                        continue
                 
-                # Lanjutkan dengan rekursi
-                next_states.append(next_state)
-                self.current_states = next_states
-                self.current_stack = new_stack
+                if key_epsilon in self.production_rules or key in self.production_rules:
+                    next_state = self.production_rules[key][0]
+                    stacks = self.production_rules[key][1].split(',')
+                    stacks.reverse()
 
-                self.process_input_epsilon()                                
-                self.process_input(input_list)
+                    # Push to stack
+                    for stack in stacks:
+                        if stack != 'e':
+                            new_stack.append(stack)
+                    
+                    # Lanjutkan dengan rekursi
+                    next_states.append(next_state)
+                    self.current_states = next_states
+                    self.current_stack = new_stack
+
+                    self.process_input_epsilon()                                
+                    self.process_input(input_list)   
     
     def process_input_epsilon(self):
         next_states = []
