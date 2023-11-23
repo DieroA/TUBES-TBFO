@@ -111,8 +111,8 @@ def parse_html(HTMLFilename):
     inputAttributes = ['type']
     inputTypes = ['text','password','email','number','checkbox']
 
-    HTMLFile = "../src/" + HTMLFilename
-    with open(HTMLFile,'r') as file:
+    HTMLFile = "../src/tests/" + HTMLFilename
+    with open(HTMLFile,'r',encoding='utf-8') as file:
         HTMLStr = file.read()
     #print(HTMLStr)
     tags = re.findall(r'<[^>]+>',HTMLStr) #extract semua tag dulu bodo amat valid apa gak, kalo typo gak ada kurung buka otomatis dilewatin

@@ -24,3 +24,7 @@ if hasil_parse[1]:
     pda_var.accept(token)
 else:
     print("Syntax Error")
+
+# HASIL TESTCASE
+# 1-6 berhasil
+# 7 gagal
