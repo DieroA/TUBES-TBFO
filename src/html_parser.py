@@ -168,8 +168,12 @@ def parse_html(HTMLFilename):
             else:
                 listchar[i] = ""
         fixedTags.append(tagFix.join(listchar))
+    
+    #FIX 2. hilangin semua comment yang ada di html
+    for tags in fixedTags:
+        if(("<!--" in tags) and ("-->" in tags)):
+            fixedTags.remove(tags)
     #print(fixedTags)
-
     #CEK 3: cek apakah tag yang diperiksa ada di list tag yang valid
     #1. hapus semua kurung di semua tag
     noBracketTags = []
@@ -265,21 +269,3 @@ def parse_html(HTMLFilename):
         return [],False
     else:
         return TokenOnly,True
-    #CEK 5: Cek kebenaran syntax atribut
-
-    #CEK 6: 
-                
-                    
-    
-                
-html_doc = """
-<html>
-    <body>
-        <h1>Hello, BeautifulSoup!</h1>
-        <ul>
-            <li><a href="http://example.com">Link 1</a></li>
-            <li><a href="http://scrapy.org">Link 2</a></li>
-        </ul>
-    </body>
-</html>
-"""
