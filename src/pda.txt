@@ -45,13 +45,14 @@ B h5 DIV B H5,DIV
 B h6 DIV B H6,DIV
 B img BODY B BODY
 B img DIV B DIV
-B /button BUTTON B e
 B form BODY B FORM,BODY
 B form DIV B  FORM,DIV
+B div FORM B DIV,FORM
 B /form FORM B e
 B button BODY B BUTTON,BODY
 B button DIV B BUTTON,DIV
 B button FORM B BUTTON,FORM
+B /button BUTTON B e
 B input BODY B BODY
 B input DIV B DIV
 B input FORM B FORM
