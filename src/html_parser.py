@@ -174,7 +174,17 @@ def parse_html(HTMLFilename):
     HTMLFile = "../src/" + HTMLFilename
     with open(HTMLFile,'r',encoding="utf8") as file:
         HTMLStr = file.read()
-    # print(HTMLStr)
+    if("<html>" in HTMLStr):
+        s1 = HTMLStr.split("<html>")[0]
+        s1 = s1.rstrip()
+        if(s1 != ""):
+            return [],False
+        s2 = HTMLStr.split("</html>")[1]
+        s2 = s2.rstrip()
+        if(s2 != ""):
+            return [],False
+        #1. periksa apakah ada string sebelum <html>
+        
     tags = re.findall(r'<[^>]+>',HTMLStr) #extract semua tag dulu bodo amat valid apa gak, kalo typo gak ada kurung buka otomatis dilewatin
     # print(tags)
     #CEK 1: cek apakah syntax kurung benar
