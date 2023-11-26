@@ -179,6 +179,7 @@ def parse_html(HTMLFilename):
         s1 = s1.rstrip()
         if(s1 != ""):
             return [],False
+    if("</html>" in HTMLStr):
         s2 = HTMLStr.split("</html>")[1]
         s2 = s2.rstrip()
         if(s2 != ""):
