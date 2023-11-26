@@ -27,6 +27,8 @@ def markingAttributes(attrList):
             if(len(quotationStack) == 0):
                 quotationStack.append('"')
                 mark = 2
+            elif(quotationStack[0] == "'"):
+                mark = 4
             else:
                 quotationStack.pop()
                 mark = 2
@@ -35,6 +37,15 @@ def markingAttributes(attrList):
                 mark = 3
             else:
                 mark = 4
+        elif(attrList[i] == "'"):
+            if(len(quotationStack) == 0):
+                quotationStack.append("'")
+                mark = 5
+            elif(quotationStack[0] == '"'):
+                mark = 4
+            else: 
+                quotationStack.pop()
+                mark = 5
         else:
             if(len(quotationStack) == 0):
                 mark = 0
@@ -42,6 +53,48 @@ def markingAttributes(attrList):
                 mark = 4
         marking[i] = mark
     return marking
+def markingValidation(attrList):
+        #1. marking attributes
+    #keterangan marking: 0: attribut 1: tanda "=" 2: dalam quotation 3: spasi diluar quotation 4. semua karakter di dalam quotation mark selain petik tutup
+    marking = [0 for i in range(len(attrList))]
+    mark = 0
+    quotationStack = []
+    for i in range(0,len(attrList)):
+        if(attrList[i] == "="):
+            if(len(quotationStack) == 0):
+                mark = 1
+            else:
+                mark = 4
+        elif(attrList[i] == '"' or attrList[i] == '”'):
+            if(len(quotationStack) == 0):
+                quotationStack.append('"')
+                mark = 2
+            elif(quotationStack[0] == "'"):
+                mark = 4
+            else:
+                quotationStack.pop()
+                mark = 2
+        elif(attrList[i] == " "):
+            if(len(quotationStack) == 0):
+                mark = 3
+            else:
+                mark = 4
+        elif(attrList[i] == "'"):
+            if(len(quotationStack) == 0):
+                quotationStack.append("'")
+                mark = 5
+            elif(quotationStack[0] == '"'):
+                mark = 4
+            else: 
+                quotationStack.pop()
+                mark = 5
+        else:
+            if(len(quotationStack) == 0):
+                mark = 0
+            else:
+                mark = 4
+        marking[i] = mark
+    return (len(quotationStack) == 0)
 def getAttributes(marking,attrList):
     attrElmt = ""
     attrElmtList = []
@@ -68,11 +121,11 @@ def getAttrElmtList(tag,token):
     AttributesOnly = tag[len(token)+1:]
     #print(AttributesOnly)
     attrList = [x for x in AttributesOnly]
-    print(attrList)
+    #print(attrList)
     marking = markingAttributes(attrList)
     print(marking)
     attrElmtList = getAttributes(marking,attrList)
-    print(attrElmtList)
+    #print(attrElmtList)
     return attrElmtList
 def getAttrStrValues(tag,token):
     AttributesOnly = tag[len(token)+1:]
@@ -80,10 +133,17 @@ def getAttrStrValues(tag,token):
     attrList = [x for x in AttributesOnly]
     #print(attrList)
     marking = markingAttributes(attrList)
-    #print(marking)
+    print(marking)
     attrStrValues = getStringValues(marking,attrList)
     #print(attrStrValues)
     return attrStrValues
+def AttrQuotationValidation(tag,token):
+    AttributesOnly = tag[len(token)+1:]
+    #print(AttributesOnly)
+    attrList = [x for x in AttributesOnly]
+    #print(attrList)
+    markingV = markingValidation(attrList)
+    return markingV
 def ValidateAttributes(attrElmtList,ValidAttributes):
     for attr in attrElmtList:
         if(not (attr in ValidAttributes)):
@@ -116,7 +176,7 @@ def parse_html(HTMLFilename):
         HTMLStr = file.read()
     #print(HTMLStr)
     tags = re.findall(r'<[^>]+>',HTMLStr) #extract semua tag dulu bodo amat valid apa gak, kalo typo gak ada kurung buka otomatis dilewatin
-    print(tags)
+    #print(tags)
     #CEK 1: cek apakah syntax kurung benar
     bracketStack = []
     tagCheck = []
@@ -173,7 +233,7 @@ def parse_html(HTMLFilename):
     for tags in fixedTags:
         if(("<!--" in tags) and ("-->" in tags)):
             fixedTags.remove(tags)
-    #print(fixedTags)
+    print(fixedTags)
     #CEK 3: cek apakah tag yang diperiksa ada di list tag yang valid
     #1. hapus semua kurung di semua tag
     noBracketTags = []
@@ -217,6 +277,9 @@ def parse_html(HTMLFilename):
             break
         print(token)
         if(token == "link"): #cek apakah rel ada di attribut link
+            flag = AttrQuotationValidation(tag,token)
+            if(not flag):
+                break
             attrElmtList = getAttrElmtList(tag,token)
             if(not("rel" in attrElmtList)): #cek apakah attribut rel ada di tag link
                 flag = False
@@ -225,19 +288,29 @@ def parse_html(HTMLFilename):
             flag = ValidateAttributes(attrElmtList,linkAttributes)
             print(attrElmtList)
             print(flag)
+            
         elif(token == "script"):
+            flag = AttrQuotationValidation(tag,token)
+            if(not flag):
+                break
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
                 flag = ValidateAttributes(attrElmtList,scriptAttributes)
             print(attrElmtList)
             print(flag)
         elif(token == "a"):
+            flag = AttrQuotationValidation(tag,token)
+            if(not flag):
+                break
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
                 flag = ValidateAttributes(attrElmtList,aAttributes)
             print(attrElmtList)
             print(flag)
         elif(token == "img"):
+            flag = AttrQuotationValidation(tag,token)
+            if(not flag):
+                break
             attrElmtList = getAttrElmtList(tag,token)
             if(not("src" in attrElmtList)): #cek apakah attribut src ada di tag img
                 flag = False
@@ -247,39 +320,48 @@ def parse_html(HTMLFilename):
             print(attrElmtList)
             print(flag)
         elif(token == "button"):
+            flag = AttrQuotationValidation(tag,token)
+            if(not flag):
+                break
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
                 flag = ValidateAttributes(attrElmtList,buttonAttributes)
                 if(not flag):
                     break
                 attrStringValues = getAttrStrValues(tag,token)
-                print(attrStringValues)
+                #print(attrStringValues)
                 for attr,val in zip(attrElmtList,attrStringValues):
                     if(attr == "type"):
                         flag = ValidateValues([val],buttonTypes)
             print(attrElmtList)
             print(flag)
         elif(token == "input"):
+            flag = AttrQuotationValidation(tag,token)
+            if(not flag):
+                break
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
                 flag = ValidateAttributes(attrElmtList,inputAttributes)
                 if(not flag):
                     break
                 attrStringValues = getAttrStrValues(tag,token)
-                print(attrStringValues)
+                #print(attrStringValues)
                 for attr,val in zip(attrElmtList,attrStringValues):
                     if(attr == "type"):
                         flag = ValidateValues([val],inputTypes)
             print(attrElmtList)
             print(flag)
         elif(token == "form"):
+            flag = AttrQuotationValidation(tag,token)
+            if(not flag):
+                break
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
                 flag = ValidateAttributes(attrElmtList,formAttributes)
                 if(not flag):
                     break
                 attrStringValues = getAttrStrValues(tag,token)
-                print(attrStringValues)
+                #print(attrStringValues)
                 for attr,val in zip(attrElmtList,attrStringValues):
                     if(attr == "method"):
                         flag = ValidateValues([val],formMethods)
@@ -287,13 +369,15 @@ def parse_html(HTMLFilename):
             print(attrElmtList)
             print(flag)
         else:
+            flag = AttrQuotationValidation(tag,token)
+            if(not flag):
+                break
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0):
                 flag = ValidateAttributes(attrElmtList,globalAttributes)
                 if(not flag):
                     break
             print(attrElmtList)
-            print(flag)
     #print(flag)
     if(not flag):
         return [],False
