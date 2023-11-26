@@ -1,5 +1,5 @@
 import pda
-import html_parser
+import html_parser_new as html_parser
 import sys
 
 # Input nama file dari terminal dengan format:
@@ -17,7 +17,7 @@ pda_var.baca_pda(file_pda)
 
 # Parse html
 hasil_parse = html_parser.parse_html(file_html)
-# print(hasil_parse)
+print(hasil_parse)
 
 # Proses menggunakan PDA
 if hasil_parse[1]:
