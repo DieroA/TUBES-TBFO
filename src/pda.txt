@@ -36,7 +36,7 @@ B /div BODY B e
 B div DIV B DIV,DIV
 B /div DIV B e 
 B a BODY B A,BODY
-B a A B e
+B /a A B e
 B h1 DIV B H1,DIV
 B h2 DIV B H2,DIV
 B h3 DIV B H3,DIV
@@ -45,14 +45,16 @@ B h5 DIV B H5,DIV
 B h6 DIV B H6,DIV
 B img BODY B BODY
 B img DIV B DIV
-B button BODY B BUTTON,BODY
-B button DIV B BUTTON,DIV
 B /button BUTTON B e
 B form BODY B FORM,BODY
 B form DIV B  FORM,DIV
 B /form FORM B e
+B button BODY B BUTTON,BODY
+B button DIV B BUTTON,DIV
+B button FORM B BUTTON,FORM
 B input BODY B BODY
 B input DIV B DIV
+B input FORM B FORM
 B p BODY B P,BODY
 B p DIV B P,DIV
 B /p P B e
@@ -65,6 +67,8 @@ B br H3 B H3
 B br H4 B H4
 B br H5 B H5
 B br H6 B H6
+B br TH B TH
+B br TD B TD 
 B em BODY B EM,BODY
 B em DIV B EM,DIV
 B em P B EM,P
@@ -74,6 +78,8 @@ B em H3 B EM,H3
 B em H4 B EM,H4
 B em H5 B EM,H5
 B em H6 B EM,H6
+B em TH B EM,TH
+B em TD B EM,TD
 B /em EM B e
 B b BODY B B,BODY
 B b DIV B B,DIV
@@ -84,6 +90,8 @@ B b H3 B B,H3
 B b H4 B B,H4
 B b H5 B B,H5
 B b H6 B B,H6
+B b TH B B,TH
+B b TD B B,TD
 B /b B B e
 B abbr BODY B ABBR,BODY
 B abbr DIV B ABBR,DIV
@@ -94,6 +102,8 @@ B abbr H3 B ABBR,H3
 B abbr H4 B ABBR,H4
 B abbr H5 B ABBR,H5
 B abbr H6 B ABBR,H6
+B abbr TH B ABBR,TH
+B abbr TD B ABBR,TD
 B /abbr ABBR B e
 B strong BODY B STRONG,BODY
 B strong DIV B STRONG,DIV
@@ -104,6 +114,8 @@ B strong H3 B STRONG,H3
 B strong H4 B STRONG,H4
 B strong H5 B STRONG,H5
 B strong H6 B STRONG,H6
+B strong TH B STRONG,TH
+B strong TD B STRONG,TD
 B /strong STRONG B e
 B small BODY B SMALL,BODY
 B small DIV B SMALL,DIV
@@ -114,6 +126,8 @@ B small H3 B SMALL,H3
 B small H4 B SMALL,H4
 B small H5 B SMALL,H5
 B small H6 B SMALL,H6
+B small TH B SMALL,TH
+B small TD B SMALL,TD
 B /small SMALL B e
 B hr BODY B BODY
 B hr DIV B DIV
@@ -124,6 +138,8 @@ B hr H3 B H3
 B hr H4 B H4
 B hr H5 B H5
 B hr H6 B H6
+B hr TH B TH
+B hr TD B TD
 B table BODY B TABLE,BODY
 B table DIV B TABLE,DIV
 B /table TABLE B e 
