@@ -138,23 +138,22 @@ class PDA:
                     else:
                         continue
 
-                if key_epsilon in self.production_rules or key in self.production_rules:
-                    next_state = self.production_rules[key][0]
-                    stacks = self.production_rules[key][1].split(',')
-                    stacks.reverse()
+                next_state = self.production_rules[key][0]
+                stacks = self.production_rules[key][1].split(',')
+                stacks.reverse()
 
-                    # Push to stack
-                    for stack in stacks:
-                        if stack != 'e':
-                            new_stack.append(stack)
-                    
-                    # Lanjutkan dengan rekursi
-                    next_states.append(next_state)
-                    self.current_states = next_states
-                    self.current_stack = new_stack
+                # Push to stack
+                for stack in stacks:
+                    if stack != 'e':
+                        new_stack.append(stack)
+                
+                # Lanjutkan dengan rekursi
+                next_states.append(next_state)
+                self.current_states = next_states
+                self.current_stack = new_stack
 
-                    self.process_input_epsilon()  
-                    break                              
+                self.process_input_epsilon()  
+                break                              
 
     def accept(self, input_list):
         self.process_input(input_list)
