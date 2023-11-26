@@ -67,12 +67,16 @@ class PDA:
         
         # Rekurens
         # note: input symbol dan pop stack 'e' belum (agak) bisa
+        old_input = input_list
         input = input_list[0]
         input_list = input_list[1:]
 
         next_states = []
         # new_stack = self.current_stack[:-1]         # Pop stack
         new_stack = []
+        # print(input)
+        # print(self.current_states)
+        # print(self.current_stack)
         for current_state in self.current_states:
             key = (current_state, input, self.current_stack[-1])
             key_epsilon = (current_state, input, 'e');   
@@ -104,11 +108,15 @@ class PDA:
                     next_states.append(next_state)
                     self.current_states = next_states
                     self.current_stack = new_stack
-                             
-                    self.process_input(input_list)   
-                else:
-                    self.process_input_epsilon()
+                    
                     self.process_input(input_list)
+                    break
+                else:
+                    key_input_epsilon = (current_state, 'e', self.current_stack[-1])
+                    if key_input_epsilon in self.production_rules:
+                        input_list = old_input 
+                        self.process_input_epsilon()
+                        self.process_input(input_list)
     
     def process_input_epsilon(self):
         next_states = []
@@ -145,7 +153,8 @@ class PDA:
                     self.current_states = next_states
                     self.current_stack = new_stack
 
-                    self.process_input_epsilon()                                
+                    self.process_input_epsilon()  
+                    break                              
 
     def accept(self, input_list):
         self.process_input(input_list)

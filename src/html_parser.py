@@ -119,29 +119,29 @@ def getStringValues(marking,attrList):
     return attrElmtList
 def getAttrElmtList(tag,token):
     AttributesOnly = tag[len(token)+1:]
-    #print(AttributesOnly)
+    # print(AttributesOnly)
     attrList = [x for x in AttributesOnly]
-    #print(attrList)
+    # print(attrList)
     marking = markingAttributes(attrList)
-    print(marking)
+    # print(marking)
     attrElmtList = getAttributes(marking,attrList)
-    #print(attrElmtList)
+    # print(attrElmtList)
     return attrElmtList
 def getAttrStrValues(tag,token):
     AttributesOnly = tag[len(token)+1:]
-    #print(AttributesOnly)
+    # print(AttributesOnly)
     attrList = [x for x in AttributesOnly]
-    #print(attrList)
+    # print(attrList)
     marking = markingAttributes(attrList)
-    print(marking)
+    # print(marking)
     attrStrValues = getStringValues(marking,attrList)
-    #print(attrStrValues)
+    # print(attrStrValues)
     return attrStrValues
 def AttrQuotationValidation(tag,token):
     AttributesOnly = tag[len(token)+1:]
-    #print(AttributesOnly)
+    # print(AttributesOnly)
     attrList = [x for x in AttributesOnly]
-    #print(attrList)
+    # print(attrList)
     markingV = markingValidation(attrList)
     return markingV
 def ValidateAttributes(attrElmtList,ValidAttributes):
@@ -174,9 +174,9 @@ def parse_html(HTMLFilename):
     HTMLFile = "../src/" + HTMLFilename
     with open(HTMLFile,'r',encoding="utf8") as file:
         HTMLStr = file.read()
-    #print(HTMLStr)
+    # print(HTMLStr)
     tags = re.findall(r'<[^>]+>',HTMLStr) #extract semua tag dulu bodo amat valid apa gak, kalo typo gak ada kurung buka otomatis dilewatin
-    #print(tags)
+    # print(tags)
     #CEK 1: cek apakah syntax kurung benar
     bracketStack = []
     tagCheck = []
@@ -192,8 +192,8 @@ def parse_html(HTMLFilename):
             elif(char == ">"):
                 bracketStack.pop()
                 tagCheck.append(True)
-    #print("#CEK 1: cek apakah syntax kurung benar")
-    print(tagCheck)
+    # print("#CEK 1: cek apakah syntax kurung benar")
+    # print(tagCheck)
     if False in tagCheck: #gagal cek kurung di tag,syntax error
         return [],False
     
@@ -210,8 +210,8 @@ def parse_html(HTMLFilename):
                     break
             prevChar = char
         tagCheck.append(flag)
-    #print("CEK 2: cek apakah ada spasi TEPAT SETELAH KURUNG BUKA")
-    print(tagCheck)    
+    # print("CEK 2: cek apakah ada spasi TEPAT SETELAH KURUNG BUKA")
+    # print(tagCheck)    
     if False in tagCheck: #gagal cek kurung di tag,syntax error
         return [],False
 
@@ -233,7 +233,7 @@ def parse_html(HTMLFilename):
     for tags in fixedTags:
         if(("<!--" in tags) and ("-->" in tags)):
             fixedTags.remove(tags)
-    print(fixedTags)
+    # print(fixedTags)
     #CEK 3: cek apakah tag yang diperiksa ada di list tag yang valid
     #1. hapus semua kurung di semua tag
     noBracketTags = []
@@ -258,12 +258,12 @@ def parse_html(HTMLFilename):
         boolTag = tagChecker in validTagKeywords
         isTagValid.append(boolTag)
         TokenOnly.append(tempToken)
-    print("bool tag")
-    print(isTagValid)
-    print("tokens")
-    print(TokenOnly)
-    print("no bracket tag")
-    print(noBracketTags)
+    # print("bool tag")
+    # print(isTagValid)
+    # print("tokens")
+    # print(TokenOnly)
+    # print("no bracket tag")
+    # print(noBracketTags)
     if False in isTagValid: #gagal cek tag yang valid,syntax error
         return [],False
     
@@ -272,114 +272,56 @@ def parse_html(HTMLFilename):
     #link: rel
     #img: src
     flag = True
+    TokenNew = []
     for token,tag in zip(TokenOnly,noBracketTags):
-        if(not flag):
+        if (not flag):
             break
-        print(token)
-        if(token == "link"): #cek apakah rel ada di attribut link
-            flag = AttrQuotationValidation(tag,token)
-            if(not flag):
-                break
-            attrElmtList = getAttrElmtList(tag,token)
-            if(not("rel" in attrElmtList)): #cek apakah attribut rel ada di tag link
-                flag = False
-                break
-            #periksa kevalidan attribut
-            flag = ValidateAttributes(attrElmtList,linkAttributes)
-            print(attrElmtList)
-            print(flag)
-            
-        elif(token == "script"):
-            flag = AttrQuotationValidation(tag,token)
-            if(not flag):
-                break
-            attrElmtList = getAttrElmtList(tag,token)
-            if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
-                flag = ValidateAttributes(attrElmtList,scriptAttributes)
-            print(attrElmtList)
-            print(flag)
-        elif(token == "a"):
-            flag = AttrQuotationValidation(tag,token)
-            if(not flag):
-                break
-            attrElmtList = getAttrElmtList(tag,token)
-            if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
-                flag = ValidateAttributes(attrElmtList,aAttributes)
-            print(attrElmtList)
-            print(flag)
-        elif(token == "img"):
-            flag = AttrQuotationValidation(tag,token)
-            if(not flag):
-                break
-            attrElmtList = getAttrElmtList(tag,token)
-            if(not("src" in attrElmtList)): #cek apakah attribut src ada di tag img
-                flag = False
-                break
-            #periksa kevalidan attribut
-            flag = ValidateAttributes(attrElmtList,imgAttributes)
-            print(attrElmtList)
-            print(flag)
+        # print(token)
+        AttrElmtList = getAttrElmtList(tag,token)
+        # print(AttrElmtList)
+        TokenNew.append(token)
+        if(token == "input"):
+            AttrStrValues = getAttrStrValues(tag,token)
+            # print(AttrStrValues)
+            for attr,val in zip(AttrElmtList,AttrStrValues):
+                if(attr == "type"):
+                    flag = ValidateValues([val],inputTypes)
+                    if(flag):
+                        TokenNew.append(attr)
+                    else:
+                        flag = False
+                else:
+                    TokenNew.append(attr)
         elif(token == "button"):
-            flag = AttrQuotationValidation(tag,token)
-            if(not flag):
-                break
-            attrElmtList = getAttrElmtList(tag,token)
-            if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
-                flag = ValidateAttributes(attrElmtList,buttonAttributes)
-                if(not flag):
-                    break
-                attrStringValues = getAttrStrValues(tag,token)
-                #print(attrStringValues)
-                for attr,val in zip(attrElmtList,attrStringValues):
-                    if(attr == "type"):
-                        flag = ValidateValues([val],buttonTypes)
-            print(attrElmtList)
-            print(flag)
-        elif(token == "input"):
-            flag = AttrQuotationValidation(tag,token)
-            if(not flag):
-                break
-            attrElmtList = getAttrElmtList(tag,token)
-            if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
-                flag = ValidateAttributes(attrElmtList,inputAttributes)
-                if(not flag):
-                    break
-                attrStringValues = getAttrStrValues(tag,token)
-                #print(attrStringValues)
-                for attr,val in zip(attrElmtList,attrStringValues):
-                    if(attr == "type"):
-                        flag = ValidateValues([val],inputTypes)
-            print(attrElmtList)
-            print(flag)
+            AttrStrValues = getAttrStrValues(tag,token)
+            # print(AttrStrValues)
+            for attr,val in zip(AttrElmtList,AttrStrValues):
+                if(attr == "type"):
+                    flag = ValidateValues([val],buttonTypes)
+                    if(flag):
+                        TokenNew.append(attr)
+                    else:
+                        flag = False
+                else:
+                    TokenNew.append(attr)
         elif(token == "form"):
-            flag = AttrQuotationValidation(tag,token)
-            if(not flag):
-                break
-            attrElmtList = getAttrElmtList(tag,token)
-            if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
-                flag = ValidateAttributes(attrElmtList,formAttributes)
-                if(not flag):
-                    break
-                attrStringValues = getAttrStrValues(tag,token)
-                #print(attrStringValues)
-                for attr,val in zip(attrElmtList,attrStringValues):
-                    if(attr == "method"):
-                        flag = ValidateValues([val],formMethods)
-            
-            print(attrElmtList)
-            print(flag)
+            AttrStrValues = getAttrStrValues(tag,token)
+            # print(AttrStrValues)
+            for attr,val in zip(AttrElmtList,AttrStrValues):
+                if(attr == "method"):
+                    flag = ValidateValues([val],formMethods)
+                    if(flag):
+                        TokenNew.append(attr)
+                    else:
+                        flag = False
+                else:
+                    TokenNew.append(attr)
         else:
-            flag = AttrQuotationValidation(tag,token)
-            if(not flag):
-                break
-            attrElmtList = getAttrElmtList(tag,token)
-            if(len(attrElmtList) != 0):
-                flag = ValidateAttributes(attrElmtList,globalAttributes)
-                if(not flag):
-                    break
-            print(attrElmtList)
-    #print(flag)
+            for attr in AttrElmtList:
+                TokenNew.append(attr)
+        # print(TokenNew)
+    # print(flag)
     if(not flag):
         return [],False
     else:
-        return TokenOnly,True
+        return TokenNew,True

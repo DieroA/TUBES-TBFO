@@ -18,6 +18,7 @@ for i in file_htmls:
 
     # Parse html
     hasil_parse = html_parser.parse_html(file_html)
+    # print(hasil_parse)
 
     # Proses menggunakan PDA
     if hasil_parse[1]:
