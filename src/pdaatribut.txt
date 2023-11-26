@@ -27,7 +27,7 @@ H rel LINK H REL
 H id REL H REL
 H class REL H REL
 H style REL H REL
-H href REL H
+H href REL H REL
 H e REL H e
 H script HEAD H SCRIPT,HEAD 
 H id SCRIPT H SCRIPT

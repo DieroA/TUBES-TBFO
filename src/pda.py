@@ -53,7 +53,6 @@ class PDA:
             stack_pop = char[2]
             next_state = char[3]
             stack_push = char[4]
-
             key = (state, input_symbol, stack_pop)
             value = (next_state, stack_push)
 
@@ -77,8 +76,7 @@ class PDA:
         for current_state in self.current_states:
             key = (current_state, input, self.current_stack[-1])
             key_epsilon = (current_state, input, 'e');   
-            # print(key)
-            
+
             for i in range(3):
                 if i == 0:                                          # δ(_, _, EPSILON) = (_, _)
                     if key_epsilon in self.production_rules:
@@ -110,6 +108,7 @@ class PDA:
                     self.process_input(input_list)   
                 else:
                     self.process_input_epsilon()
+                    self.process_input(input_list)
     
     def process_input_epsilon(self):
         next_states = []
@@ -130,7 +129,7 @@ class PDA:
                         new_stack = self.current_stack[:-1]
                     else:
                         continue
-                
+
                 if key_epsilon in self.production_rules or key in self.production_rules:
                     next_state = self.production_rules[key][0]
                     stacks = self.production_rules[key][1].split(',')
