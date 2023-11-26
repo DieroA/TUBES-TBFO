@@ -12,7 +12,7 @@ for i in file_htmls:
           accept_with = "", production_rules = {},
           current_stack = [], current_states = [])
     pda_var.baca_pda(file_pda)
-    file_html = i + '.html'
+    file_html = 'tests/' + i + '.html'
     print("")
     print(file_html)
 
@@ -22,7 +22,6 @@ for i in file_htmls:
     # Proses menggunakan PDA
     if hasil_parse[1]:
         token = hasil_parse[0]
-        print(token)
         pda_var.accept(token)
     else:
         print("Syntax Error")
