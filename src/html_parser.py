@@ -1,5 +1,4 @@
 import re
-
 def isHTMLTagBracketsValid(tagCheck):
     regex = "<(\"[^\"]*\"|'[^']*'|[^'\">])*>"
 
@@ -24,7 +23,7 @@ def markingAttributes(attrList):
                 mark = 1
             else:
                 mark = 4
-        elif(attrList[i] == '"'):
+        elif(attrList[i] == '"' or attrList[i] == '”'):
             if(len(quotationStack) == 0):
                 quotationStack.append('"')
                 mark = 2
@@ -69,11 +68,11 @@ def getAttrElmtList(tag,token):
     AttributesOnly = tag[len(token)+1:]
     #print(AttributesOnly)
     attrList = [x for x in AttributesOnly]
-    #print(attrList)
+    print(attrList)
     marking = markingAttributes(attrList)
-    #print(marking)
+    print(marking)
     attrElmtList = getAttributes(marking,attrList)
-    #print(attrElmtList)
+    print(attrElmtList)
     return attrElmtList
 def getAttrStrValues(tag,token):
     AttributesOnly = tag[len(token)+1:]
@@ -100,23 +99,24 @@ def parse_html(HTMLFilename):
     #1. filter tag yang kurungnya sudah valid
     #kalo kurungnya gak lengkap gak masuk list tags
     validTagKeywords =['html','head','body','title','link','script','h1','h2','h3','h4','h5','h6','p','br','em','b','abbr','strong','small','hr','div','a','img','button','form','input','table','tr','td','th']
-    linkAttributes = ['rel','href']
-    scriptAttributes = ['src']
-    aAttributes = ['href']
-    imgAttributes = ['src','alt']
-    buttonAttributes = ['type']
+    globalAttributes =['id','class','style']
+    linkAttributes = ['rel','href','id','class','style']
+    scriptAttributes = ['src','id','class','style']
+    aAttributes = ['href','id','class','style']
+    imgAttributes = ['src','alt','id','class','style']
+    buttonAttributes = ['type','id','class','style']
     buttonTypes = ['submit','reset','button']
-    formAttributes = ['action','method']
+    formAttributes = ['action','method','id','class','style']
     formMethods = ['GET','POST']
-    inputAttributes = ['type']
+    inputAttributes = ['type','id','class','style']
     inputTypes = ['text','password','email','number','checkbox']
 
-    HTMLFile = "../src/tests/" + HTMLFilename
-    with open(HTMLFile,'r',encoding='utf-8') as file:
+    HTMLFile = "../src/" + HTMLFilename
+    with open(HTMLFile,'r',encoding="utf8") as file:
         HTMLStr = file.read()
     #print(HTMLStr)
     tags = re.findall(r'<[^>]+>',HTMLStr) #extract semua tag dulu bodo amat valid apa gak, kalo typo gak ada kurung buka otomatis dilewatin
-    #print(tags)
+    print(tags)
     #CEK 1: cek apakah syntax kurung benar
     bracketStack = []
     tagCheck = []
@@ -133,7 +133,7 @@ def parse_html(HTMLFilename):
                 bracketStack.pop()
                 tagCheck.append(True)
     #print("#CEK 1: cek apakah syntax kurung benar")
-    #print(tagCheck)
+    print(tagCheck)
     if False in tagCheck: #gagal cek kurung di tag,syntax error
         return [],False
     
@@ -151,7 +151,7 @@ def parse_html(HTMLFilename):
             prevChar = char
         tagCheck.append(flag)
     #print("CEK 2: cek apakah ada spasi TEPAT SETELAH KURUNG BUKA")
-    #print(tagCheck)    
+    print(tagCheck)    
     if False in tagCheck: #gagal cek kurung di tag,syntax error
         return [],False
 
@@ -198,12 +198,12 @@ def parse_html(HTMLFilename):
         boolTag = tagChecker in validTagKeywords
         isTagValid.append(boolTag)
         TokenOnly.append(tempToken)
-    #print("bool tag")
-    #print(isTagValid)
-    #print("tokens")
-    #print(TokenOnly)
-    #print("no bracket tag")
-    #print(noBracketTags)
+    print("bool tag")
+    print(isTagValid)
+    print("tokens")
+    print(TokenOnly)
+    print("no bracket tag")
+    print(noBracketTags)
     if False in isTagValid: #gagal cek tag yang valid,syntax error
         return [],False
     
@@ -213,6 +213,9 @@ def parse_html(HTMLFilename):
     #img: src
     flag = True
     for token,tag in zip(TokenOnly,noBracketTags):
+        if(not flag):
+            break
+        print(token)
         if(token == "link"): #cek apakah rel ada di attribut link
             attrElmtList = getAttrElmtList(tag,token)
             if(not("rel" in attrElmtList)): #cek apakah attribut rel ada di tag link
@@ -220,14 +223,20 @@ def parse_html(HTMLFilename):
                 break
             #periksa kevalidan attribut
             flag = ValidateAttributes(attrElmtList,linkAttributes)
+            print(attrElmtList)
+            print(flag)
         elif(token == "script"):
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
                 flag = ValidateAttributes(attrElmtList,scriptAttributes)
+            print(attrElmtList)
+            print(flag)
         elif(token == "a"):
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
                 flag = ValidateAttributes(attrElmtList,aAttributes)
+            print(attrElmtList)
+            print(flag)
         elif(token == "img"):
             attrElmtList = getAttrElmtList(tag,token)
             if(not("src" in attrElmtList)): #cek apakah attribut src ada di tag img
@@ -235,6 +244,8 @@ def parse_html(HTMLFilename):
                 break
             #periksa kevalidan attribut
             flag = ValidateAttributes(attrElmtList,imgAttributes)
+            print(attrElmtList)
+            print(flag)
         elif(token == "button"):
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
@@ -242,8 +253,12 @@ def parse_html(HTMLFilename):
                 if(not flag):
                     break
                 attrStringValues = getAttrStrValues(tag,token)
-                #print(attrStringValues)
-                flag = ValidateValues(attrStringValues,buttonTypes)
+                print(attrStringValues)
+                for attr,val in zip(attrElmtList,attrStringValues):
+                    if(attr == "type"):
+                        flag = ValidateValues([val],buttonTypes)
+            print(attrElmtList)
+            print(flag)
         elif(token == "input"):
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
@@ -251,8 +266,12 @@ def parse_html(HTMLFilename):
                 if(not flag):
                     break
                 attrStringValues = getAttrStrValues(tag,token)
-                #print(attrStringValues)
-                flag = ValidateValues(attrStringValues,inputTypes)
+                print(attrStringValues)
+                for attr,val in zip(attrElmtList,attrStringValues):
+                    if(attr == "type"):
+                        flag = ValidateValues([val],inputTypes)
+            print(attrElmtList)
+            print(flag)
         elif(token == "form"):
             attrElmtList = getAttrElmtList(tag,token)
             if(len(attrElmtList) != 0): #cek kevalidan attribut jika ada
@@ -260,10 +279,21 @@ def parse_html(HTMLFilename):
                 if(not flag):
                     break
                 attrStringValues = getAttrStrValues(tag,token)
-                #print(attrStringValues)
+                print(attrStringValues)
                 for attr,val in zip(attrElmtList,attrStringValues):
                     if(attr == "method"):
                         flag = ValidateValues([val],formMethods)
+            
+            print(attrElmtList)
+            print(flag)
+        else:
+            attrElmtList = getAttrElmtList(tag,token)
+            if(len(attrElmtList) != 0):
+                flag = ValidateAttributes(attrElmtList,globalAttributes)
+                if(not flag):
+                    break
+            print(attrElmtList)
+            print(flag)
     #print(flag)
     if(not flag):
         return [],False
