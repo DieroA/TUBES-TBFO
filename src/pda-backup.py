@@ -76,21 +76,21 @@ class PDA:
             key = (current_state, input, self.current_stack[-1])
             key_epsilon = (current_state, input, 'e');   
             # print(key)
-            
-            for i in range(3):
-                if i == 0:                                          # δ(_, _, EPSILON) = (_, _)
+
+            for i in range(2):
+                if i == 0:                                          # (_, _, EPSILON) = (_, _)
                     if key_epsilon in self.production_rules:
                         new_stack = self.current_stack
                     else:
                         continue
                 
-                elif i == 1:                                        # δ(_, _, ~EPSILON) = (_, _)
+                elif i == 1:                                        # (_, _, ~EPSILON) = (_, _)
                     if key in self.production_rules:
                         new_stack = self.current_stack[:-1]
                     else:
                         continue
                 
-                if i < 2:
+                if key_epsilon in self.production_rules or key in self.production_rules:
                     next_state = self.production_rules[key][0]
                     stacks = self.production_rules[key][1].split(',')
                     stacks.reverse()
@@ -104,10 +104,9 @@ class PDA:
                     next_states.append(next_state)
                     self.current_states = next_states
                     self.current_stack = new_stack
-                             
+
+                    self.process_input_epsilon()                                
                     self.process_input(input_list)   
-                else:
-                    self.process_input_epsilon
     
     def process_input_epsilon(self):
         next_states = []
@@ -117,13 +116,13 @@ class PDA:
             key_epsilon = (current_state, 'e', 'e')  
 
             for i in range(2):
-                if i == 0:                                          # δ(_, e, EPSILON) = (_, _)
+                if i == 0:                                          # (_, e, EPSILON) = (_, _)
                     if key_epsilon in self.production_rules:
                         new_stack = self.current_stack
                     else:
                         continue
                 
-                elif i == 1:                                        # δ(_, e, ~EPSILON) = (_, _)
+                elif i == 1:                                        # (_, e, ~EPSILON) = (_, _)
                     if key in self.production_rules:
                         new_stack = self.current_stack[:-1]
                     else:
