@@ -289,12 +289,12 @@ B id TR B TR
 B class TR B TR
 B style TR B TR
 B /tr TR B e
-B th TABLE B TH,TR
+B th TR B TH,TR
 B id TH B TH
 B class TH B TH
 B style TH B TH
 B /th TH B e
-B td TABLE B TD,TR
+B td TR B TD,TR
 B id TD B TD
 B class TD B TD
 B style TD B TD

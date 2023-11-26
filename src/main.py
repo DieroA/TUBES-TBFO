@@ -21,7 +21,12 @@ hasil_parse = html_parser.parse_html(file_html)
 
 # Proses menggunakan PDA
 if hasil_parse[1]:
-    token = hasil_parse[0]
-    pda_var.accept(token)
+    tokens = hasil_parse[0]
+    for token in tokens:
+        if token not in pda_var.input_symbols:
+            print("Syntax Error")
+            break
+    else:
+        pda_var.accept(tokens)
 else:
     print("Syntax Error")
