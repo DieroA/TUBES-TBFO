@@ -61,7 +61,8 @@ class PDA:
     def process_input(self, input_list):
         # Basis
         # Berhenti ketika input sudah diproses semua.
-        if (len(input_list) < 1):                      
+        if (len(input_list) < 1):     
+            self.process_input_epsilon();                 
             return
         
         # Rekurens
@@ -89,7 +90,7 @@ class PDA:
                         new_stack = self.current_stack[:-1]
                     else:
                         continue
-                
+
                 if i < 2:
                     next_state = self.production_rules[key][0]
                     stacks = self.production_rules[key][1].split(',')
@@ -107,7 +108,7 @@ class PDA:
                              
                     self.process_input(input_list)   
                 else:
-                    self.process_input_epsilon
+                    self.process_input_epsilon()
     
     def process_input_epsilon(self):
         next_states = []
