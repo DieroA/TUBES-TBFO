@@ -172,8 +172,12 @@ def parse_html(HTMLFilename):
     inputTypes = ['text','password','email','number','checkbox']
 
     HTMLFile = "../src/" + HTMLFilename
-    with open(HTMLFile,'r',encoding="utf8") as file:
-        HTMLStr = file.read()
+    try:
+        with open(HTMLFile,'r',encoding="utf8") as file:
+            HTMLStr = file.read()
+    except:
+        print(f"Gagal membuka file html {HTMLFilename}.")
+        exit()
     if("<html>" in HTMLStr):
         s1 = HTMLStr.split("<html>")[0]
         s1 = s1.rstrip()
