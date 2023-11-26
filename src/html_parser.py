@@ -213,6 +213,8 @@ def parse_html(HTMLFilename):
     #img: src
     flag = True
     for token,tag in zip(TokenOnly,noBracketTags):
+        if(not flag):
+            break
         print(token)
         if(token == "link"): #cek apakah rel ada di attribut link
             attrElmtList = getAttrElmtList(tag,token)
@@ -252,7 +254,9 @@ def parse_html(HTMLFilename):
                     break
                 attrStringValues = getAttrStrValues(tag,token)
                 print(attrStringValues)
-                flag = ValidateValues(attrStringValues,buttonTypes)
+                for attr,val in zip(attrElmtList,attrStringValues):
+                    if(attr == "type"):
+                        flag = ValidateValues([val],buttonTypes)
             print(attrElmtList)
             print(flag)
         elif(token == "input"):
@@ -263,7 +267,9 @@ def parse_html(HTMLFilename):
                     break
                 attrStringValues = getAttrStrValues(tag,token)
                 print(attrStringValues)
-                flag = ValidateValues(attrStringValues,inputTypes)
+                for attr,val in zip(attrElmtList,attrStringValues):
+                    if(attr == "type"):
+                        flag = ValidateValues([val],inputTypes)
             print(attrElmtList)
             print(flag)
         elif(token == "form"):
