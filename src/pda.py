@@ -23,8 +23,9 @@ class PDA:
         try:
             lines = []
             filename = "../src/" + file
-            for line in open(filename, "r"):
-                lines.append(line.strip())
+            with open(filename, "r") as file:
+                for line in file:
+                    lines.append(line.strip())
         except Exception as e:
             print(f"Gagal membuka file {file}.")
             print(e)
